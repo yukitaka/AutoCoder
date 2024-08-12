@@ -2,11 +2,14 @@ name: AutoCode Workflow
 
 on:
   issues:
-    types: [opened, reopened]
+    types: [opened, reopened, labeled]
 
 jobs:
   issue_event:
-    if: contains(github.event.label.*.name, 'autocoder-bot')
+    if: |
+      (github.event.action == 'opened' || github.event.action == 'reopened') &&
+      contains(github.event.issue.labels.*.name, 'autocoder-bot')
+
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Code

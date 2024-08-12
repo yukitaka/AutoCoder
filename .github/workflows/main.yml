@@ -1,15 +1,27 @@
-name: Workflow Name
+name: AutoCode Workflow
 
 on:
-  push:
+  issues:
+    tpyes: [opend, reopened]
 
 jobs:
-  job_name:
+  issue_event:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Code
         uses: actions/checkout@v4
 
-      - name: Greeting Message
-        run: echo "Hello,world"
+      - name: Echo Issue Information
+        env:
+          ISSUE_NUMBER: ${{ github.event.issue.number }}
+          ISSUE_TITLE: ${{ github.event.issue.title }}
+          ISSUE_BODY: ${{ github.event.issue.body }}
+          ISSUE_ASSIGNEES: ${{ toJson(github.event.issue.assignees) }}
+          ISSUE_LABELS: ${{ toJson(github.event.issue.labels) }}
+        run: |
+          echo "Issue Number: $ISSUE_NUMBER"
+          echo "Issue Title: $ISSUE_TITLE"
+          echo "Issue Body: $ISSUE_BODY"
+          echo "Issue Assignees: $ISSUE_ASSIGNEES"
+          echo "Issue Labels: $ISSUE_LABELS"
 

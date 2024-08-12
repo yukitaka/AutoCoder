@@ -2,7 +2,7 @@ name: AutoCode Workflow
 
 on:
   issues:
-    types: [opend, reopened]
+    types: [opened, reopened]
 
 jobs:
   issue_event:

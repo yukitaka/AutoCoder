@@ -6,7 +6,7 @@ on:
 
 jobs:
   issue_event:
-    if: github.event.label.name == 'autocoder-bot'
+    if: contains(github.event.label.*.name, 'autocoder-bot')
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Code

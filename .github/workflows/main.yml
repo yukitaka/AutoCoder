@@ -28,12 +28,12 @@ jobs:
           name: autocoder-artifact
           path: generated_code.txt
           retention-days: 1
-      - name: Download Articact
-        uses: actions/download-artifact@v4
-        with:
-          name: autocoder-artifact
-      - name: Display Generated Code using the ls command
-        run: ls -R autocoder-artifact
+#      - name: Download Articact
+#        uses: actions/download-artifact@v4
+#        with:
+#          name: autocoder-artifact
+#      - name: Display Generated Code using the ls command
+#        run: ls -R autocoder-artifact
       - name: Create Pull Request
         uses: peter-evans/create-pull-request@v6
         with:

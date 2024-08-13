@@ -22,7 +22,7 @@ jobs:
           REPOSITORY: ${{ github.repository }}
           ISSUE_NUMBER: ${{ github.event.issue.number }}
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
-        run: ./interaction_script.sh $GITHUB_TOKEN $REPOSITORY $ISSUE_NUMBER $OPENAI_API_KEY > generated_code.txt
+        run: ./scripts/script.sh $GITHUB_TOKEN $REPOSITORY $ISSUE_NUMBER $OPENAI_API_KEY > generated_code.txt
       - name: Upload Artifact
         uses: actions/upload-artifact@v4
         with:

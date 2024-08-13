@@ -12,7 +12,8 @@ jobs:
     steps:
       - name: Checkout Code
         uses: actions/checkout@v4
-
+      - name: Make the script executable
+        run: chmod +x ./scripts/script.sh
       - name: Generate Code with ChatGPT
         id: generate_code
         env:
@@ -27,6 +28,10 @@ jobs:
           name: autocoder-artifact
           path: generated_code.txt
           retention-days: 1
+      - name: Download Articact
+        uses: actions/download-artifact@v4
+        with:
+          name: autocoder-artifact
       - name: Display Generated Code using the ls command
-        run: ls
+        run: ls -R autocoder-artifact
 

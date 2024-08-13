@@ -6,9 +6,7 @@ on:
 
 jobs:
   issue_event:
-    if: |
-      (github.event.action == 'opened' || github.event.action == 'reopened') &&
-      contains(github.event.issue.labels.*.name, 'autocoder-bot')
+    if: contains(github.event.issue.labels.*.name, 'autocoder-bot')
 
     runs-on: ubuntu-latest
     steps:

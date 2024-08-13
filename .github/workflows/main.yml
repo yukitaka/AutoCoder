@@ -15,17 +15,20 @@ jobs:
       - name: Checkout Code
         uses: actions/checkout@v4
 
-      - name: Echo Issue Information
+      - name: Generate Code with ChatGPT
+        id: generate_code
         env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          REPOSITORY: ${{ github.repository }}
           ISSUE_NUMBER: ${{ github.event.issue.number }}
-          ISSUE_TITLE: ${{ github.event.issue.title }}
-          ISSUE_BODY: ${{ github.event.issue.body }}
-          ISSUE_ASSIGNEES: ${{ join(github.event.issue.assignees.*.login, ', ') }}
-          ISSUE_LABELS: ${{ join(github.event.issue.labels.*.name, ', ') }}
-        run: |
-          echo "Issue Number: $ISSUE_NUMBER"
-          echo "Issue Title: $ISSUE_TITLE"
-          echo "Issue Body: $ISSUE_BODY"
-          echo "Issue Assignees: $ISSUE_ASSIGNEES"
-          echo "Issue Labels: $ISSUE_LABELS"
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+        run: ./interaction_script.sh $GITHUB_TOKEN $REPOSITORY $ISSUE_NUMBER $OPENAI_API_KEY > generated_code.txt
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: autocoder-artifact
+          path: generated_code.txt
+          retention-days: 1
+      - name: Display Generated Code using the ls command
+        run: ls
 

@@ -19,9 +19,10 @@ jobs:
       - name: AutoCoder Composite Action
         uses: yukitaka/AutoCoder@v1
         with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          openai_api_key: ${{ secrets.OPENAI_API_KEY }}
-          repository: ${{ github.repository }}
-          issue_number: ${{ github.event.issue.number }}
-          label: "autocoder-bot"
-          script_path: "./scripts/script.sh"
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+          REPOSITORY: ${{ github.repository }}
+          ISSUE_NUMBER: ${{ github.event.issue.number }}
+          LABEL: "autocoder-bot"
+          SCRIPT_PATH: "./scripts/script.sh"
+          

@@ -63,10 +63,10 @@ runs:
     - name: Create Pull Request
       uses: peter-evans/create-pull-request@v6
       with:
+        token: ${{ inputs.GITHUB_TOKEN }}
         commit-message: "Suggest changes for issue #${{ inputs.ISSUE_NUMBER }}"
         author: "autocoder-bot <actions@github.com>"
         branch: "autocoder-branch-${{ inputs.ISSUE_NUMBER }}"
         title: "AutoCoder Request #${{ inputs.ISSUE_NUMBER }}"
-        labels:
-          - ${{ inputs.LABEL }}
+        labels: ${{ inputs.LABEL }}
 

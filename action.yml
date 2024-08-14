@@ -1,11 +1,3 @@
-  REPOSITORY:
-  ISSUE_NUMBER:
-  OPENAI_API_KEY:
-  SCRIPT_PATH:
-  LABEL:
-runs:
-  using: composite
-  steps:
 name: "AutoCoder"
 description: "This action automates the process of generating code from GitHub issues using OpenAIs ChatGPT and subsequently creates a pull request with the generated code for review."
 author: "yukitaka"

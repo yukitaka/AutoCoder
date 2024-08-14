@@ -6,7 +6,7 @@ inputs:
   GITHUB_TOKEN:
     description: "Personal access token (PAT) used for GitHub API authentication. This token is required to create pull requests and handle other repository interactions."
     required: true
-  OPNEAI_API_KEY:
+  OPENAI_API_KEY:
     description: "API key for OpenAI, enabling interactions with the ChatGPT service to generate code based on issue descriptions."
     required: true
   REPOSITORY:
@@ -37,7 +37,7 @@ runs:
       shell: bash
     - name: Generate Code with ChatGPT
       id: generate_code
-      run: ${{ inputs.SCRIPT_PATH }} ${{ inputs.GITHUB_TOKEN }} ${{ inputs.REPOSITORY }} ${{ inputs.ISSUE_NUMBER }} ${{ inputs.OPNEAI_API_KEY }} > generated_code.txt
+      run: ${{ inputs.SCRIPT_PATH }} ${{ inputs.GITHUB_TOKEN }} ${{ inputs.REPOSITORY }} ${{ inputs.ISSUE_NUMBER }} ${{ inputs.OPENAI_API_KEY }} > generated_code.txt
       shell: bash
     - name: Upload Artifact
       uses: actions/upload-artifact@v4

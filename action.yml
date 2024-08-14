@@ -1,0 +1,73 @@
+  REPOSITORY:
+  ISSUE_NUMBER:
+  OPENAI_API_KEY:
+  SCRIPT_PATH:
+  LABEL:
+runs:
+  using: composite
+  steps:
+name: "AutoCoder"
+description: "This action automates the process of generating code from GitHub issues using OpenAIs ChatGPT and subsequently creates a pull request with the generated code for review."
+author: "yukitaka"
+
+inputs:
+  github_token:
+    description: "Personal access token (PAT) used for GitHub API authentication. This token is required to create pull requests and handle other repository interactions."
+    required: true
+  openai_api_key:
+    description: "API key for OpenAI, enabling interactions with the ChatGPT service to generate code based on issue descriptions."
+    required: true
+  repository:
+    required: true
+  issue_number:
+    required: true
+  script_path:
+    required: true
+  label:
+    description: "The label assigned to GitHub issues that should be processed by the AutoCoder action. Only issues with this label will trigger the code generation process."
+    required: true
+    default: "autocoder-bot"
+
+outputs:
+  pull_request_url:
+    description: "The URL of the pull request that has been automatically created, containing the auto-generated code for review and potential merging."
+
+runs:
+  using: "composite"
+  steps:
+    - name: Checkout the repository
+      uses: actions/checkout@v4
+      with:
+        token: ${{ inputs.github_token }}
+        repository: ${{ inputs.repository }}
+    - name: Make the script executable
+      run: chmod +x ${{ inputs.script_path }}
+      shell: bash
+    - name: Generate Code with ChatGPT
+      id: generate_code
+      run: ${{ inputs.script_path }} ${{ inputs.github_token }} ${{ inputs.repository }} ${{ inputs.issue_number }} ${{ inputs.openai_api_key }} > generated_code.txt
+      shell: bash
+    - name: Upload Artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: autocoder-artifact
+        path: generated_code.txt
+        retention-days: 1
+    - name: Download Articact
+      uses: actions/download-artifact@v4
+      with:
+        name: autocoder-artifact
+        overwrite: true
+    - name: Display Generated Code using the ls command
+      run: ls -R autocoder-artifact
+      shell: bash
+    - name: Create Pull Request
+      uses: peter-evans/create-pull-request@v6
+      with:
+        commit-message: "Suggest changes for issue #${{ inputs.issue_number }}"
+        author: "autocoder-bot <actions@github.com>"
+        branch: "autocoder-branch-${{ inputs.issue_number }}"
+        title: "AutoCoder Request #${{ inputs.issue_number }}"
+        labels:
+          - ${{ inputs.label }}
+

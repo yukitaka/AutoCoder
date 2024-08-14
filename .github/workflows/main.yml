@@ -14,35 +14,14 @@ jobs:
 
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout Code
+      - name: Checkout the repository
         uses: actions/checkout@v4
-      - name: Make the script executable
-        run: chmod +x ./scripts/script.sh
-      - name: Generate Code with ChatGPT
-        id: generate_code
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          REPOSITORY: ${{ github.repository }}
-          ISSUE_NUMBER: ${{ github.event.issue.number }}
-          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
-        run: ./scripts/script.sh $GITHUB_TOKEN $REPOSITORY $ISSUE_NUMBER $OPENAI_API_KEY > generated_code.txt
-      - name: Upload Artifact
-        uses: actions/upload-artifact@v4
+      - name: AutoCoder Composite Action
+        uses: yukitaka/AutoCoder@v1
         with:
-          name: autocoder-artifact
-          path: generated_code.txt
-          retention-days: 1
-#      - name: Download Articact
-#        uses: actions/download-artifact@v4
-#        with:
-#          name: autocoder-artifact
-#      - name: Display Generated Code using the ls command
-#        run: ls -R autocoder-artifact
-      - name: Create Pull Request
-        uses: peter-evans/create-pull-request@v6
-        with:
-          commit-message: "Suggest changes for issue #${{ github.event.issue.number }}"
-          author: "autocoder-bot <actions@github.com>"
-          branch: "autocoder-branch-${{ github.event.issue.number }}"
-          title: "AutoCoder Request #${{ github.event.issue.number }}"
-
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          openai_api_key: ${{ secrets.OPENAI_API_KEY }}
+          repository: ${{ github.repository }}
+          issue_number: ${{ github.event.issue.number }}
+          label: "autocoder-bot"
+          script_path: "./scripts/script.sh"
